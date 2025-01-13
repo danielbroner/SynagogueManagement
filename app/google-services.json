@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "686128866919",
+    "project_id": "synagogue-managment",
+    "storage_bucket": "synagogue-managment.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686128866919:android:756523b63ca12071d316c2",
+        "android_client_info": {
+          "package_name": "com.synagoguemanagement.synagoguemanagement"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtDJIJIUwO7zMD3RrNv3bW-9Xr1P_Ius4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
