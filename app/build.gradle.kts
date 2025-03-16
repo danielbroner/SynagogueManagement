@@ -9,6 +9,10 @@ android {
     namespace = "com.synagoguemanagement.synagoguemanagement"
     compileSdk = 35
 
+    viewBinding {
+        enable = true
+    }
+
     defaultConfig {
         applicationId = "com.synagoguemanagement.synagoguemanagement"
         minSdk = 24

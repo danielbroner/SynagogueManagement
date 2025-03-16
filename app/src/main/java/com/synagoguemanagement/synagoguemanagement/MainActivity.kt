@@ -2,6 +2,7 @@ package com.synagoguemanagement.synagoguemanagement
 
 import android.os.Bundle
 import android.view.Menu
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -11,7 +12,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.synagoguemanagement.synagoguemanagement.databinding.ActivityMainBinding
+import com.synagoguemanagement.synagoguemanagement.ui.book.BookSeatsFragment
+import com.synagoguemanagement.synagoguemanagement.ui.messages.MessagesFragment
+import com.synagoguemanagement.synagoguemanagement.ui.prayer.PrayerTimeFragment
+import com.synagoguemanagement.synagoguemanagement.ui.shabbatentry.ShabbatEntryFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,25 +31,33 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.appBarMain.toolbar)
+        setToolBar()
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            val fragment: Fragment = when (item.itemId) {
+                R.id.nav_messages -> MessagesFragment()
+                R.id.nav_prayer_time -> PrayerTimeFragment()
+                R.id.nav_book_seats -> BookSeatsFragment()
+                R.id.nav_shabbat_entry -> ShabbatEntryFragment()
+                else -> ShabbatEntryFragment()
+            }
+            loadFragment(fragment)
+            true
         }
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+    }
+
+    private fun setToolBar() {
+        val toolbar = findViewById<Toolbar>(R.id.top_toolbar)
+        setSupportActionBar(toolbar)
+
+        // Set Icon and Title
+        supportActionBar?.apply {
+            setDisplayShowTitleEnabled(true)
+            title = "Synagogue"
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.synagogue_24px) // Synagogue icon
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -54,5 +69,11 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .commit()
     }
 }

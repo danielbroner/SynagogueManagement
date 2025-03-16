@@ -10,4 +10,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_signin">Sign in</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="shabbat_entry_title">Upcoming shabbat entry and exit times</string>
+    <string name="shabbat_entry_ticket">7th-8th of Adar</string>
+    <string name="shabbat_entry_time">Entry Friday, 5:34PM</string>
+    <string name="shabbat_exit_time">Exit Saturday, 6:48PM</string>
 </resources>
