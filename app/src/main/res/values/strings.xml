@@ -14,4 +14,7 @@
     <string name="shabbat_entry_ticket">7th-8th of Adar</string>
     <string name="shabbat_entry_time">Entry Friday, 5:34PM</string>
     <string name="shabbat_exit_time">Exit Saturday, 6:48PM</string>
+    <string name="booked_seats_title">Your booked seats</string>
+    <string name="book_seats_button">Book seats</string>
+    <string name="cancel_button">Cancel</string>
 </resources>

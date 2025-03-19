@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.synagoguemanagement.synagoguemanagement.R
 
-class ItemAdapter(private val items: List<String>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ShabbatEntryAdapter(private val items: List<String>) : RecyclerView.Adapter<ShabbatEntryAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shabbat_entry_card, parent, false)
