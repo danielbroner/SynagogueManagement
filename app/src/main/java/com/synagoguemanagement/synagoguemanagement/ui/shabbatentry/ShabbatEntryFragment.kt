@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.synagoguemanagement.synagoguemanagement.R
 import com.synagoguemanagement.synagoguemanagement.databinding.FragmentShabbatEntryBinding
 
 class ShabbatEntryFragment  : Fragment() {
@@ -28,7 +27,7 @@ class ShabbatEntryFragment  : Fragment() {
 
         // Set RecyclerView properties
         binding.shabbatEntries.layoutManager = LinearLayoutManager(requireContext())
-        binding.shabbatEntries.adapter = ItemAdapter(items)
+        binding.shabbatEntries.adapter = ShabbatEntryAdapter(items)
     }
 
     override fun onDestroyView() {
