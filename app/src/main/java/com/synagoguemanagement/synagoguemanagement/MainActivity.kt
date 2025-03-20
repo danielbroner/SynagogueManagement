@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.synagoguemanagement.synagoguemanagement.databinding.ActivityMainBinding
 import com.synagoguemanagement.synagoguemanagement.ui.book.BookSeatsFragment
-import com.synagoguemanagement.synagoguemanagement.ui.book.SeatMapFragment
 import com.synagoguemanagement.synagoguemanagement.ui.messages.MessagesFragment
 import com.synagoguemanagement.synagoguemanagement.ui.prayer.PrayerTimeFragment
 import com.synagoguemanagement.synagoguemanagement.ui.shabbatentry.ShabbatEntryFragment

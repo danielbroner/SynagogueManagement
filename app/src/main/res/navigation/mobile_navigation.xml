@@ -3,38 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/all_assigned_seats">
-
-<!--    <fragment-->
-<!--        android:id="@+id/nav_home"-->
-<!--        android:name="com.synagoguemanagement.synagoguemanagement.ui.home.HomeFragment"-->
-<!--        android:label="@string/menu_home"-->
-<!--        tools:layout="@layout/fragment_home" />-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/nav_gallery"-->
-<!--        android:name="com.synagoguemanagement.synagoguemanagement.ui.signin.SigninFragment"-->
-<!--        android:label="@string/menu_signin"-->
-<!--        tools:layout="@layout/fragment_signin" />-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/nav_slideshow"-->
-<!--        android:name="com.synagoguemanagement.synagoguemanagement.ui.slideshow.SlideshowFragment"-->
-<!--        android:label="@string/menu_slideshow"-->
-<!--        tools:layout="@layout/fragment_slideshow" />-->
+    app:startDestination="@+id/bookSeatsFragment">
 
     <fragment
-        android:id="@+id/all_assigned_seats"
+        android:id="@+id/bookSeatsFragment"
         android:name="com.synagoguemanagement.synagoguemanagement.ui.book.BookSeatsFragment"
         android:label="@string/book_seats_button">
-        <action
-            android:id="@+id/action_book_seats_button_to_seats_map_page"
-            app:destination="@id/seats_map_page"
-            />
     </fragment>
-
     <fragment
-        android:id="@+id/seats_map_page"
+        android:id="@+id/seatsMapFragment"
         android:name="com.synagoguemanagement.synagoguemanagement.ui.book.SeatMapFragment"
         android:label="Seats map page" />
 </navigation>
