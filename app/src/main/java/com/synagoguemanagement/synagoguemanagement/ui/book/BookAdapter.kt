@@ -24,10 +24,8 @@ class BookAdapter(private val items: List<String>) : RecyclerView.Adapter<BookAd
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        private val time: TextView = itemView.findViewById(R.id.book_seats_amount)
         private val amount: TextView = itemView.findViewById(R.id.book_seats_amount)
         fun bind(item: String) {
-//            time.text = "11th of Adar"
             amount.text = "5 seats"
         }
     }
