@@ -2,12 +2,15 @@ package com.synagoguemanagement.synagoguemanagement
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.yoursynagogue.SigninFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.synagoguemanagement.synagoguemanagement.databinding.ActivityMainBinding
 import com.synagoguemanagement.synagoguemanagement.ui.book.BookSeatsFragment
@@ -27,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setToolBar()
+
+        val signInFragment = SigninFragment()
+        loadFragment(signInFragment)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -56,8 +62,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        val item = menu.findItem(R.id.action_sign_out)
+        item?.title = "Sign Out"
         return true
     }
 
@@ -70,5 +77,29 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, fragment)
             .commit()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_sign_out -> {
+                signOutUser()
+                true
+            }
+            android.R.id.home -> {  // Handle back button if needed
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun signOutUser() {
+        Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show()
+        openSignInPage()
+        // Add logout logic, such as clearing session data or Firebase sign-out
+    }
+
+    private fun openSignInPage() {
+        loadFragment(SigninFragment())
     }
 }
