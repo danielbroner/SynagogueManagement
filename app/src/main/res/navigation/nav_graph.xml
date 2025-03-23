@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/signupFragment">
+
+    <!-- SignUpFragment definition -->
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.synagoguemanagement.synagoguemanagement.ui.signin.signupFragment"
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_signup">
+
+        <!-- Action to navigate to SignInFragment -->
+        <action
+            android:id="@+id/action_signUpFragment_to_signInFragment"
+            app:destination="@id/signinFragment" />
+    </fragment>
+
+    <!-- SignInFragment definition -->
+    <fragment
+        android:id="@+id/signinFragment"
+        android:name="com.synagoguemanagement.synagoguemanagement.ui.signin.SigninFragment"
+        android:label="Sign In"
+        tools:layout="@layout/fragment_signin" >
+
+    <action
+        android:id="@+id/action_signinFragment_to_signupFragment"
+        app:destination="@id/signupFragment" />
+
+        </fragment>
+
+    </navigation>

@@ -6,6 +6,7 @@
     android:gravity="center"
     android:padding="24dp">
 
+    <!-- Icon ImageView -->
     <ImageView
         android:id="@+id/iconImageView"
         android:layout_width="100dp"
@@ -13,26 +14,40 @@
         android:layout_marginBottom="16dp"
         android:src="@drawable/synagogue_24px" />
 
+    <!-- Title Text -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome back"
+        android:text="Welcome"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginBottom="16dp" />
 
+    <!-- Name EditText -->
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@android:drawable/editbox_background"
+        android:hint="Enter your name"
+        android:padding="12dp"
+        android:textSize="16sp" />
+
+    <!-- Email EditText -->
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:background="@android:drawable/editbox_background"
-        android:hint="Enter your Email"
+        android:hint="Enter your email"
         android:padding="12dp"
         android:textSize="16sp" />
 
+    <!-- Password EditText -->
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
@@ -44,30 +59,34 @@
         android:textSize="16sp"
         android:layout_marginBottom="12dp" />
 
-    <TextView
-        android:id="@+id/forgotPasswordText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Forget password?"
-        android:textColor="#33BFCF"
-        android:textSize="14sp"
-        android:layout_marginBottom="16dp"
-        android:gravity="end" />
-
-    <Button
-        android:id="@+id/loginButton"
+    <!-- Confirm Password EditText -->
+    <EditText
+        android:id="@+id/confirmPasswordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:background="@android:drawable/editbox_background"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Register Button -->
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register"
         android:backgroundTint="#33BFCF"
         android:textColor="@android:color/white"
         android:layout_marginBottom="16dp" />
 
+    <!-- Already have an account text with SignIn link -->
     <TextView
-        android:id="@+id/signUpText"
+        android:id="@+id/signInText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don’t have an account? Sign Up"
+        android:text="Already have an account? Sign In"
         android:textColor="#33BFCF"
         android:textSize="14sp"
         android:gravity="center" />
