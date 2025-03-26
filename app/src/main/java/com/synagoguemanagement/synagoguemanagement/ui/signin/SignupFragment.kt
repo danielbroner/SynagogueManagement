@@ -9,8 +9,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.synagoguemanagement.synagoguemanagement.R
+import com.synagoguemanagement.synagoguemanagement.auth.AuthManager
 
 class SignupFragment : Fragment() {
     override fun onCreateView(
@@ -37,26 +37,32 @@ class SignupFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
             } else if (password != confirmPassword) {
                 Toast.makeText(requireContext(), "Passwords do not match", Toast.LENGTH_SHORT).show()
+            } else if (password.length < 6) {
+                Toast.makeText(requireContext(), "Password should be at least 6 characters", Toast.LENGTH_SHORT).show()
             } else {
-                // Perform registration logic (e.g., create user)
-                Toast.makeText(requireContext(), "Registration successful", Toast.LENGTH_SHORT).show()
-                // Navigate to another fragment or activity if needed
-                registerNewUser()
+                registerNewUser(email, password)
             }
         }
 
         // Sign In text click listener (to navigate to SignInFragment)
         signInText.setOnClickListener {
-//            findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
             openLoginPage()
         }
 
         return view
     }
 
-    private fun registerNewUser() {
+    private fun registerNewUser(email: String, password: String) {
         //TODO Add user to DB
-        openLoginPage()
+        AuthManager.signUpUser(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(requireActivity(), "Sign-up successful!", Toast.LENGTH_SHORT).show()
+                    openLoginPage()
+                } else {
+                    Toast.makeText(requireActivity(), "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
     private fun openLoginPage() {

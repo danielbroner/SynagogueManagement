@@ -12,16 +12,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.yoursynagogue.SigninFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
 import com.synagoguemanagement.synagoguemanagement.databinding.ActivityMainBinding
 import com.synagoguemanagement.synagoguemanagement.ui.book.BookSeatsFragment
 import com.synagoguemanagement.synagoguemanagement.ui.messages.MessagesFragment
 import com.synagoguemanagement.synagoguemanagement.ui.prayer.PrayerTimeFragment
 import com.synagoguemanagement.synagoguemanagement.ui.shabbatentry.ShabbatEntryFragment
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,12 @@ class MainActivity : AppCompatActivity() {
             loadFragment(fragment)
             true
         }
+
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this)
+
+        // Get instance of FirebaseAuth
+        auth = FirebaseAuth.getInstance()
     }
 
     private fun setToolBar() {

@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.synagoguemanagement.synagoguemanagement.R
+import com.synagoguemanagement.synagoguemanagement.auth.AuthManager
 import com.synagoguemanagement.synagoguemanagement.ui.messages.MessagesFragment
 import com.synagoguemanagement.synagoguemanagement.ui.signin.SignupFragment
 
@@ -34,10 +35,7 @@ class SigninFragment : Fragment() {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
             } else {
-                // Perform login logic (e.g., authentication)
-                Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                // Navigate to another fragment or activity if needed
-                openMessagesPage()
+                issueLogin(email, password)
             }
         }
 
@@ -48,11 +46,22 @@ class SigninFragment : Fragment() {
 
         // Sign Up click listener
         signUpText.setOnClickListener {
-//            findNavController().navigate(R.id.action_signinFragment_to_signupFragment)
             openSignupPage()
         }
 
         return view
+    }
+
+    private fun issueLogin(email: String, password: String) {
+        AuthManager.signInUser(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                    openMessagesPage()
+                } else {
+                    Toast.makeText(requireContext(), "Authentication failed.", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
     private fun openMessagesPage() {
