@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.synagoguemanagement.synagoguemanagement.MainActivity
 import com.synagoguemanagement.synagoguemanagement.R
 import com.synagoguemanagement.synagoguemanagement.auth.AuthManager
 import com.synagoguemanagement.synagoguemanagement.ui.messages.MessagesFragment
@@ -36,6 +37,11 @@ class SigninFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
             } else {
                 issueLogin(email, password)
+                // Perform login logic (e.g., authentication)
+                Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                // Navigate to another fragment or activity if needed
+                openMessagesPage()
+                handleLoginSuccess()
             }
         }
 
@@ -50,6 +56,10 @@ class SigninFragment : Fragment() {
         }
 
         return view
+    }
+    private fun handleLoginSuccess() {
+        val mainActivity = activity as? MainActivity
+        mainActivity?.onUserLoggedIn()
     }
 
     private fun issueLogin(email: String, password: String) {

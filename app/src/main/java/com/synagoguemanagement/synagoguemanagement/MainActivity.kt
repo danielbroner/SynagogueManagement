@@ -5,9 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.yoursynagogue.SigninFragment
@@ -19,10 +16,10 @@ import com.synagoguemanagement.synagoguemanagement.ui.messages.MessagesFragment
 import com.synagoguemanagement.synagoguemanagement.ui.prayer.PrayerTimeFragment
 import com.synagoguemanagement.synagoguemanagement.ui.shabbatentry.ShabbatEntryFragment
 import com.google.firebase.auth.FirebaseAuth
+import com.synagoguemanagement.synagoguemanagement.ui.signin.SignupFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
 
@@ -34,10 +31,16 @@ class MainActivity : AppCompatActivity() {
 
         setToolBar()
 
-        val signInFragment = SigninFragment()
-        loadFragment(signInFragment)
-
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        if (!isUserLoggedIn()) {
+            loadFragment(SigninFragment()) // Show Sign-in page first
+            bottomNavigationView.visibility = android.view.View.GONE
+        } else {
+            loadFragment(ShabbatEntryFragment()) // Show main page if logged in
+            bottomNavigationView.visibility = android.view.View.VISIBLE
+        }
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             val fragment: Fragment = when (item.itemId) {
                 R.id.nav_messages -> MessagesFragment()
@@ -60,32 +63,31 @@ class MainActivity : AppCompatActivity() {
     private fun setToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.top_toolbar)
         setSupportActionBar(toolbar)
-
-        // Set Icon and Title
         supportActionBar?.apply {
             setDisplayShowTitleEnabled(true)
             title = "Synagogue"
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.synagogue_24px) // Synagogue icon
+            setHomeAsUpIndicator(R.drawable.synagogue_24px)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
-        val item = menu.findItem(R.id.action_sign_out)
-        item?.title = "Sign Out"
+        menu.findItem(R.id.action_sign_out)?.title = "Sign Out"
         return true
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, fragment)
             .commit()
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.visibility = if (fragment is SigninFragment || fragment is SignupFragment) {
+            android.view.View.GONE
+        } else {
+            android.view.View.VISIBLE
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -94,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 signOutUser()
                 true
             }
-            android.R.id.home -> {  // Handle back button if needed
+            android.R.id.home -> {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
@@ -103,12 +105,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun signOutUser() {
+        val sharedPref = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        sharedPref.edit().putBoolean("isLoggedIn", false).apply()
+
         Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show()
         openSignInPage()
-        // Add logout logic, such as clearing session data or Firebase sign-out
     }
 
     private fun openSignInPage() {
         loadFragment(SigninFragment())
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        val sharedPref = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        return sharedPref.getBoolean("isLoggedIn", false)
+    }
+
+    fun onUserLoggedIn() {
+        val sharedPref = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        sharedPref.edit().putBoolean("isLoggedIn", true).apply()
+
+        loadFragment(ShabbatEntryFragment())
+        findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = android.view.View.VISIBLE
     }
 }
