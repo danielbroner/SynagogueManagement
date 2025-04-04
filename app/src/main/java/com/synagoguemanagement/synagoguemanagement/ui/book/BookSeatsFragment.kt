@@ -7,8 +7,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.DocumentSnapshot
 import com.synagoguemanagement.synagoguemanagement.R
+import com.synagoguemanagement.synagoguemanagement.auth.AuthManager
+import com.synagoguemanagement.synagoguemanagement.data.ReservedSeats
+import com.synagoguemanagement.synagoguemanagement.data.Seat
 import com.synagoguemanagement.synagoguemanagement.databinding.FragmentBookSeatsBinding
+import com.synagoguemanagement.synagoguemanagement.db.DbManager
+import java.util.Calendar
 
 class BookSeatsFragment : Fragment() {
     private var _binding: FragmentBookSeatsBinding? = null
@@ -27,17 +33,13 @@ class BookSeatsFragment : Fragment() {
         return binding.root
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Sample list of items
-        val items = listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5", "Item 5")
-
-        // Set RecyclerView properties
         binding.bookSeatsEntries.layoutManager = LinearLayoutManager(requireContext())
-        binding.bookSeatsEntries.adapter = BookAdapter(items)
+        binding.bookSeatsEntries.adapter = BookAdapter(mutableListOf())
+
+        getUserReservedSeats()
     }
 
     override fun onDestroyView() {
@@ -47,8 +49,45 @@ class BookSeatsFragment : Fragment() {
 
     private fun openSeatMapFragment() {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.container, SeatMapFragment()) // Ensure this ID matches your activity layout
-            .addToBackStack(null) // Allows navigating back
+            .replace(R.id.container, SeatMapFragment())
+            .addToBackStack(null)
             .commit()
+    }
+
+    private fun getUserReservedSeats() {
+        val maxDaysToSearch = 30
+        val result: MutableList<ReservedSeats> = mutableListOf()
+
+        for (i in 0..maxDaysToSearch) {
+            val date = getNextDay(i)
+
+            DbManager.getInstance()!!.getReservedSeats(date) { document ->
+                val seats = filterByUser(document)
+
+                if (seats.isNotEmpty()) {
+                    val element = ReservedSeats(date, seats)
+                    result.add(element)
+                    (binding.bookSeatsEntries.adapter as BookAdapter).updateData(mutableListOf(element))
+                }
+            }
+        }
+    }
+
+    private fun getNextDay(i: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, i)
+
+        return ReservedSeats.dateToString(calendar.time)
+    }
+
+    private fun filterByUser(document: DocumentSnapshot): List<Seat> {
+        if (!document.exists()) {
+            return emptyList()
+        }
+
+        val userId = AuthManager.getUser().uid
+        val reserved = document.toObject(ReservedSeats::class.java)!!
+
+        return reserved.seats.filter { seat -> seat.userId == userId }.toList()
     }
 }

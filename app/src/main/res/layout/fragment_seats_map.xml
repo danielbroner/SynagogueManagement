@@ -32,6 +32,7 @@
         android:focusable="true"
         android:gravity="center"
         android:padding="12dp"
+        android:paddingBottom="6dp"
         android:text="Select Date"
         android:textAlignment="viewStart"
         android:textColor="@color/black"

@@ -1,6 +1,6 @@
 package com.synagoguemanagement.synagoguemanagement.data
 
-data public class ShabbatTimesResponse(
+data class ShabbatTimesResponse(
         val title: String,
         val items: List<ShabbatItem>
 )
