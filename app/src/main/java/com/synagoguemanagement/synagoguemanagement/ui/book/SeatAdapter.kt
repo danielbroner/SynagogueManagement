@@ -8,12 +8,12 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.synagoguemanagement.synagoguemanagement.R
+import com.synagoguemanagement.synagoguemanagement.auth.AuthManager
 import com.synagoguemanagement.synagoguemanagement.data.Seat
 
-class SeatAdapter(private val seats: List<Seat>) : RecyclerView.Adapter<SeatAdapter.SeatViewHolder>() {
+class SeatAdapter(private var reservedSeats: MutableList<Int>) : RecyclerView.Adapter<SeatAdapter.SeatViewHolder>() {
     private val hiddenPositions: Set<Int> = setOf(2, 3, 4, 5, 6, 12, 13, 14, 18, 19, 25, 26)
     private val selectedSeats = mutableSetOf<Int>()
-    private val reservedSeats = seats.map { seat -> seat.position }
 
     class SeatViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val icon: ImageView = view.findViewById(R.id.iconImageView)
@@ -50,6 +50,11 @@ class SeatAdapter(private val seats: List<Seat>) : RecyclerView.Adapter<SeatAdap
         }
     }
 
+    fun getSelectedItems(): List<Seat> {
+        println()
+        return selectedSeats.map { position -> Seat(AuthManager.getUser().uid, position) }.toList()
+    }
+
     private fun isReservedSeat(position: Int): Boolean {
         return reservedSeats.contains(position)
     }
@@ -71,5 +76,11 @@ class SeatAdapter(private val seats: List<Seat>) : RecyclerView.Adapter<SeatAdap
         }
 
         return R.color.button_bg
+    }
+
+    fun updateList(allSeats: List<Int>) {
+        this.reservedSeats.clear()
+        this.reservedSeats.addAll(allSeats)
+        notifyDataSetChanged()
     }
 }

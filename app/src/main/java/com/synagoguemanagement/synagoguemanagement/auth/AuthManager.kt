@@ -12,7 +12,6 @@ object AuthManager {
 
     fun signUpUser(email: String, password: String): Task<AuthResult> {
         val createUserWithEmailAndPassword = auth.createUserWithEmailAndPassword(email, password)
-        println()
         return createUserWithEmailAndPassword
     }
 
@@ -22,5 +21,9 @@ object AuthManager {
 
     fun getUser(): FirebaseUser {
         return auth.currentUser!!
+    }
+
+    fun isAdmin(): Boolean {
+        return "shay@test.com" == getUser().email
     }
 }
