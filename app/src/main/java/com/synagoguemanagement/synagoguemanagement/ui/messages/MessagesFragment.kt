@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -15,6 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.synagoguemanagement.synagoguemanagement.R
 import com.synagoguemanagement.synagoguemanagement.ui.messages.Message
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.Locale
 
 
 class MessagesFragment : Fragment() {
@@ -23,6 +27,9 @@ class MessagesFragment : Fragment() {
     private lateinit var messagePopup: LinearLayout
     private lateinit var messageEditText: EditText
     private lateinit var sendButton: Button
+
+    private lateinit var adapter: MessageAdapter
+    private val messages = mutableListOf<Message>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,14 +45,18 @@ class MessagesFragment : Fragment() {
         sendMessageButton = view.findViewById(R.id.sendMessageButton)
         messagePopup = view.findViewById(R.id.messagePopup)
         messageEditText = view.findViewById(R.id.messageEditText)
+        messageEditText.setSingleLine(false)
+        messageEditText.imeOptions = EditorInfo.IME_FLAG_NO_ENTER_ACTION
         sendButton = view.findViewById(R.id.sendButton)
 
-        val messages = List(10) { i ->
-            Message("User $i", "2025-03-25", "This is message number $i")
+        // Populate initial messages if you want
+        repeat(3) { i ->
+            messages.add(Message("User $i", "2025-03-25", "This is message number $i"))
         }
 
+        adapter = MessageAdapter(messages)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = MessageAdapter(messages)
+        recyclerView.adapter = adapter
 
         sendMessageButton.setOnClickListener {
             messagePopup.visibility = View.VISIBLE
@@ -54,14 +65,17 @@ class MessagesFragment : Fragment() {
         }
 
         sendButton.setOnClickListener {
-            val newMessage = messageEditText.text.toString()
-            if (newMessage.isNotBlank()) {
-                Toast.makeText(requireContext(), "Message Sent: $newMessage", Toast.LENGTH_SHORT).show()
+            val text = messageEditText.text.toString()
+            if (text.isNotBlank()) {
+                val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                val newMessage = Message("", currentDate, text) // No name
+                adapter.addMessage(newMessage)
                 messageEditText.text.clear()
                 messagePopup.visibility = View.GONE
                 hideKeyboard()
             }
         }
+
     }
 
     private fun showKeyboard() {
