@@ -16,6 +16,7 @@ import com.synagoguemanagement.synagoguemanagement.ui.messages.MessagesFragment
 import com.synagoguemanagement.synagoguemanagement.ui.prayer.PrayerTimeFragment
 import com.synagoguemanagement.synagoguemanagement.ui.shabbatentry.ShabbatEntryFragment
 import com.google.firebase.auth.FirebaseAuth
+import com.synagoguemanagement.synagoguemanagement.ui.profile.EditProfileFragment
 import com.synagoguemanagement.synagoguemanagement.ui.signin.SignupFragment
 
 class MainActivity : AppCompatActivity() {
@@ -92,6 +93,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_edit_profile -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, EditProfileFragment())
+                    .addToBackStack(null)
+                    .commit()
+                true
+            }
             R.id.action_sign_out -> {
                 signOutUser()
                 true

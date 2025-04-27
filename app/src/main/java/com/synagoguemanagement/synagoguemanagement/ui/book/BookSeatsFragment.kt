@@ -85,7 +85,7 @@ class BookSeatsFragment : Fragment() {
             return emptyList()
         }
 
-        val userId = AuthManager.getUser().uid
+        val userId = AuthManager.getCurrentUser().uid
         val reserved = document.toObject(ReservedSeats::class.java)!!
 
         return reserved.seats.filter { seat -> seat.userId == userId }.toList()

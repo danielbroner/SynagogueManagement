@@ -1,50 +1,80 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="35dp"
-        android:paddingBottom="16dp" />
-
-    <Button
-        android:id="@+id/sendMessageButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:textAllCaps="false"
-        android:text="Send a Message" />
-
+    <!-- Main content in vertical layout -->
     <LinearLayout
-        android:id="@+id/messagePopup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_border"
-        android:padding="16dp"
-        android:elevation="8dp"
-        android:orientation="vertical"
-        android:layout_marginBottom="50dp"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/messageEditText"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Write a message..."
-            android:inputType="text" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="35dp"
+            android:paddingBottom="16dp" />
 
         <Button
-            android:id="@+id/sendButton"
+            android:id="@+id/sendMessageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="90dp"
             android:textAllCaps="false"
-            android:text="Send" />
+            android:text="Send a Message" />
+
+        <LinearLayout
+            android:id="@+id/messagePopup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:padding="16dp"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="110dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/messageEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Write a message..."
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/sendButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="Send" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <!-- Plus button for users (floating) -->
+    <ImageButton
+        android:id="@+id/plusButton"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="45dp"
+        android:src="@drawable/ic_add"
+        android:background="@drawable/bg_circle_black"
+        android:contentDescription="Add Message"
+        android:tint="@android:color/white"
+        android:visibility="gone" />
 
+    <!-- TextView for admin (floating at bottom center) -->
+    <TextView
+        android:id="@+id/adminMessagesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:text="View All Messages"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="30sp"
+        android:visibility="gone" />
+</FrameLayout>

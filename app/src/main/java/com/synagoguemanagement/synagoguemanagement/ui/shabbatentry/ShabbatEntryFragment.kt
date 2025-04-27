@@ -33,11 +33,9 @@ class ShabbatEntryFragment : Fragment() {
         // Fetch Shabbat times for Jerusalem (change geonameid if needed)
         viewModel.fetchShabbatTimes(281184)
 
-        viewModel.shabbatTimes.observe(viewLifecycleOwner) { shabbatList ->
-            // Ensure shabbatList is a List<ShabbatItem>
+        viewModel.shabbatTimes.observe(viewLifecycleOwner, Observer { shabbatList ->
             adapter.updateData(shabbatList)
-        }
-
+        })
     }
 
     override fun onDestroyView() {

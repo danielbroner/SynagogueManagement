@@ -52,7 +52,7 @@ class DbManager {
             if (document.exists()) {
                 val beforeRemoval = document.toObject(ReservedSeats::class.java)!!
                 val updated = ReservedSeats(date, beforeRemoval.seats.filter {
-                    seat: Seat -> seat.userId != AuthManager.getUser().uid
+                    seat: Seat -> seat.userId != AuthManager.getCurrentUser().uid
                 })
 
                 if (updated.seats.isEmpty()) deleteDocument(date) else reserveSeats(updated)
