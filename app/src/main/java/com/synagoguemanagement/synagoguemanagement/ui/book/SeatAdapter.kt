@@ -52,7 +52,7 @@ class SeatAdapter(private var reservedSeats: MutableList<Int>) : RecyclerView.Ad
 
     fun getSelectedItems(): List<Seat> {
         println()
-        return selectedSeats.map { position -> Seat(AuthManager.getUser().uid, position) }.toList()
+        return selectedSeats.map { position -> Seat(AuthManager.getCurrentUser().uid, position) }.toList()
     }
 
     private fun isReservedSeat(position: Int): Boolean {

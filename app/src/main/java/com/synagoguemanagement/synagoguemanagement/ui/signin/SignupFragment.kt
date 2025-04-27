@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.synagoguemanagement.synagoguemanagement.R
 import com.synagoguemanagement.synagoguemanagement.auth.AuthManager
 
@@ -53,17 +54,49 @@ class SignupFragment : Fragment() {
     }
 
     private fun registerNewUser(email: String, password: String) {
-        //TODO Add user to DB
+        val name = view?.findViewById<EditText>(R.id.nameEditText)?.text.toString()
+
         AuthManager.signUpUser(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(requireActivity(), "Sign-up successful!", Toast.LENGTH_SHORT).show()
-                    openLoginPage()
+                    val user = AuthManager.getCurrentUser()
+                    val uid = user?.uid
+
+                    // ✅ Update Firebase Auth profile with display name
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setDisplayName(name)
+                        .build()
+
+                    user?.updateProfile(profileUpdates)
+                        ?.addOnCompleteListener { updateTask ->
+                            if (updateTask.isSuccessful && uid != null) {
+                                // Save to Firestore (already works great!)
+                                val userData = hashMapOf(
+                                    "email" to email,
+                                    "name" to name,
+                                    "isAdmin" to false
+                                )
+
+                                val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                                db.collection("users").document(uid)
+                                    .set(userData)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(requireContext(), "Sign-up successful!", Toast.LENGTH_SHORT).show()
+                                        openLoginPage()
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(requireContext(), "Failed to save user data", Toast.LENGTH_SHORT).show()
+                                    }
+                            } else {
+                                Toast.makeText(requireContext(), "Failed to update user profile", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                 } else {
-                    Toast.makeText(requireActivity(), "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
 
     private fun openLoginPage() {
         parentFragmentManager.popBackStack()

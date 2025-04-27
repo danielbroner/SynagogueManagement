@@ -66,13 +66,38 @@ class SigninFragment : Fragment() {
         AuthManager.signInUser(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                    openMessagesPage()
+
+                    val uid = AuthManager.getCurrentUser()?.uid
+                    if (uid != null) {
+                        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                        db.collection("users").document(uid).get()
+                            .addOnSuccessListener { document ->
+                                if (document.exists()) {
+                                    val isAdminFromEmail = email == "shay@test.com"
+                                    val isAdmin = document.getBoolean("isAdmin") ?: isAdminFromEmail
+
+                                    // Save to SharedPreferences
+
+                                    val prefs = requireContext().getSharedPreferences("user_prefs", android.content.Context.MODE_PRIVATE)
+                                    prefs.edit().putBoolean("is_admin", isAdmin).apply()
+
+                                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                                    openMessagesPage()
+                                    handleLoginSuccess()
+                                } else {
+                                    Toast.makeText(requireContext(), "User data not found", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(requireContext(), "Failed to retrieve user data", Toast.LENGTH_SHORT).show()
+                            }
+                    }
                 } else {
                     Toast.makeText(requireContext(), "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
 
     private fun openMessagesPage() {
         parentFragmentManager.beginTransaction()

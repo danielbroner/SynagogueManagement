@@ -37,10 +37,18 @@ class ShabbatEntryAdapter(private var items: List<ShabbatItem>) : RecyclerView.A
         private val exit: TextView = itemView.findViewById(R.id.shabbat_entry_exit)
 
         fun bind(item: ShabbatItem) {
-            title.text = item.title
-            start.text = "Entry: ${item.date}"  // Example, replace with actual data field
-            exit.text = "Exit: ${item.date}"   // Example, replace with actual data field
+            val dateTime = java.time.ZonedDateTime.parse(item.date)
+            val dateFormatted = dateTime.toLocalDate().toString() // or format prettier if needed
+            val timeFormatted = dateTime.toLocalTime().toString().substring(0, 5) // e.g., "19:05"
+
+            if (item.category == "candles") {
+                title.text = "Date: $dateFormatted"
+                start.text = "Shabbat Entry: $timeFormatted"
+            } else if (item.category == "havdalah") {
+                exit.text = "Havdalah: $timeFormatted"
+            }
         }
+
     }
 }
 

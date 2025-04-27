@@ -27,5 +27,6 @@
         android:background="?android:selectableItemBackgroundBorderless"
         android:src="@android:drawable/ic_delete"
         android:contentDescription="Delete"
+        android:visibility="gone"
         android:tint="#FF4444" />
 </RelativeLayout>

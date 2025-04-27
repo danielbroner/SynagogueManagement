@@ -19,11 +19,11 @@ object AuthManager {
         return auth.signInWithEmailAndPassword(email, password)
     }
 
-    fun getUser(): FirebaseUser {
+    fun getCurrentUser(): FirebaseUser {
         return auth.currentUser!!
     }
 
     fun isAdmin(): Boolean {
-        return "shay@test.com" == getUser().email
+        return "shay@test.com" == getCurrentUser().email
     }
 }
