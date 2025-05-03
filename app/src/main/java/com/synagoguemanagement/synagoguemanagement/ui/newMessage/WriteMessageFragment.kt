@@ -68,8 +68,9 @@ class WriteMessageFragment : Fragment() {
         }
 
         backButton.setOnClickListener {
-            findNavController().popBackStack()
+            parentFragmentManager.popBackStack()
         }
+
     }
 
     private fun loadMessages() {

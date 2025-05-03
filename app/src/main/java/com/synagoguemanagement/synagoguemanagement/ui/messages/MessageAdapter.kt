@@ -14,7 +14,6 @@ class MessageAdapter(
     private val onDeleteMessage: ((Message) -> Unit)? = null
 ) : RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
-
     class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val dateTextView: TextView = view.findViewById(R.id.dateTextView)
         val messageTextView: TextView = view.findViewById(R.id.messageTextView)
@@ -35,14 +34,11 @@ class MessageAdapter(
         if (isAdmin) {
             holder.deleteButton.visibility = View.VISIBLE
             holder.deleteButton.setOnClickListener {
-                messages.removeAt(position)
-                notifyItemRemoved(position)
-                notifyItemRangeChanged(position, messages.size)
+                onDeleteMessage?.invoke(message) // Call the delete function from MessagesFragment
             }
         } else {
             holder.deleteButton.visibility = View.GONE
         }
-
     }
 
     override fun getItemCount(): Int = messages.size

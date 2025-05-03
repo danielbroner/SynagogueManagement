@@ -1,7 +1,7 @@
 package com.synagoguemanagement.synagoguemanagement.ui.messages
 
 data class Message(
-        val id: String = "",
-        val date: String = "",
-        val message: String = ""
+        var id: String = "",
+        var date: String = "",
+        var message: String = ""
 )
