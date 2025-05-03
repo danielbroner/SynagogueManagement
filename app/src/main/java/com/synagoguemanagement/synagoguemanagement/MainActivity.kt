@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.yoursynagogue.SigninFragment
+//import com.example.yoursynagogue.SigninFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.synagoguemanagement.synagoguemanagement.databinding.ActivityMainBinding
@@ -17,6 +17,7 @@ import com.synagoguemanagement.synagoguemanagement.ui.prayer.PrayerTimeFragment
 import com.synagoguemanagement.synagoguemanagement.ui.shabbatentry.ShabbatEntryFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.synagoguemanagement.synagoguemanagement.ui.profile.EditProfileFragment
+import com.synagoguemanagement.synagoguemanagement.ui.signin.SigninFragment
 import com.synagoguemanagement.synagoguemanagement.ui.signin.SignupFragment
 
 class MainActivity : AppCompatActivity() {

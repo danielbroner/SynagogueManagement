@@ -24,7 +24,7 @@ class PrayerTimeFragment : Fragment(R.layout.fragment_prayer_time) {
         prayerTimeRecyclerView = view.findViewById(R.id.prayerTimeRecyclerView)
 
         // Add a header item for the title
-        val headerPrayerTime = PrayerTime("Header", "זמני התפילות והשיעורים")
+        val headerPrayerTime = PrayerTime("Header", "זמני התפילות")
 
         // Initialize the RecyclerView
         prayerTimeAdapter = PrayerTimeAdapter(prayerTimesList, isSuperAdmin)
@@ -32,11 +32,11 @@ class PrayerTimeFragment : Fragment(R.layout.fragment_prayer_time) {
         prayerTimeRecyclerView.adapter = prayerTimeAdapter
 
         // Example: Populate some prayer times (this should come from your data source)
-        prayerTimesList.add(PrayerTime("Fajr", "Message for Fajr"))
-        prayerTimesList.add(PrayerTime("Dhuhr", "Message for Dhuhr"))
-        prayerTimesList.add(PrayerTime("Asr", "Message for Asr"))
-        prayerTimesList.add(PrayerTime("Maghrib", "Message for Maghrib"))
-        prayerTimesList.add(PrayerTime("Isha", "Message for Isha"))
+        prayerTimesList.add(PrayerTime("שחרית","שחרית א 06:30"))
+        prayerTimesList.add(PrayerTime("שחרית","שחרית ב 08:00"))
+        prayerTimesList.add(PrayerTime("מנחה", "מנחה 20 דקות לפני השקיעה"))
+        prayerTimesList.add(PrayerTime("ערבית", "ערבית א 20 דקות אחרי השקיעה"))
+        prayerTimesList.add(PrayerTime("ערבית", "ערבית ב 22:00"))
     }
 }
 
@@ -97,7 +97,7 @@ class PrayerTimeAdapter(
         val titleText: TextView = itemView.findViewById(R.id.headerTitle)
 
         fun bind() {
-            titleText.text = "זמני התפילות והשיעורים"
+            titleText.text = "זמני התפילות"
         }
     }
 

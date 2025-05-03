@@ -1,4 +1,4 @@
-package com.example.yoursynagogue
+package com.synagoguemanagement.synagoguemanagement.ui.signin
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.FirebaseFirestore
 import com.synagoguemanagement.synagoguemanagement.MainActivity
 import com.synagoguemanagement.synagoguemanagement.R
 import com.synagoguemanagement.synagoguemanagement.auth.AuthManager
@@ -16,6 +17,7 @@ import com.synagoguemanagement.synagoguemanagement.ui.messages.MessagesFragment
 import com.synagoguemanagement.synagoguemanagement.ui.signin.SignupFragment
 
 class SigninFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -37,11 +39,6 @@ class SigninFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
             } else {
                 issueLogin(email, password)
-                // Perform login logic (e.g., authentication)
-                Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                // Navigate to another fragment or activity if needed
-                openMessagesPage()
-                handleLoginSuccess()
             }
         }
 
@@ -57,26 +54,19 @@ class SigninFragment : Fragment() {
 
         return view
     }
-    private fun handleLoginSuccess() {
-        val mainActivity = activity as? MainActivity
-        mainActivity?.onUserLoggedIn()
-    }
 
     private fun issueLogin(email: String, password: String) {
         AuthManager.signInUser(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-
                     val uid = AuthManager.getCurrentUser()?.uid
                     if (uid != null) {
-                        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                        val db = FirebaseFirestore.getInstance()
                         db.collection("users").document(uid).get()
                             .addOnSuccessListener { document ->
                                 if (document.exists()) {
                                     val isAdminFromEmail = email == "shay@test.com"
                                     val isAdmin = document.getBoolean("isAdmin") ?: isAdminFromEmail
-
-                                    // Save to SharedPreferences
 
                                     val prefs = requireContext().getSharedPreferences("user_prefs", android.content.Context.MODE_PRIVATE)
                                     prefs.edit().putBoolean("is_admin", isAdmin).apply()
@@ -98,18 +88,22 @@ class SigninFragment : Fragment() {
             }
     }
 
+    private fun handleLoginSuccess() {
+        val mainActivity = activity as? MainActivity
+        mainActivity?.onUserLoggedIn()
+    }
 
     private fun openMessagesPage() {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.container, MessagesFragment()) // Ensure this ID matches your activity layout
-            .addToBackStack(null) // Allows navigating back
+            .replace(R.id.container, MessagesFragment())
+            .addToBackStack(null)
             .commit()
     }
 
     private fun openSignupPage() {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.container, SignupFragment()) // Ensure this ID matches your activity layout
-            .addToBackStack(null) // Allows navigating back
+            .replace(R.id.container, SignupFragment())
+            .addToBackStack(null)
             .commit()
     }
 }
