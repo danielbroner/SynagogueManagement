@@ -1,25 +1,46 @@
 package com.synagoguemanagement.synagoguemanagement.ui.signin
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.synagoguemanagement.synagoguemanagement.R
 import com.synagoguemanagement.synagoguemanagement.auth.AuthManager
+import java.io.ByteArrayOutputStream
 
 class SignupFragment : Fragment() {
+
+    private lateinit var profileImageView: ImageView
+    private lateinit var chooseImageButton: Button
+    private var encodedImage: String? = null
+
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data
+            uri?.let {
+                profileImageView.setImageURI(it)
+                saveImageToBase64()
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_signup, container, false)
 
-        // Initialize UI elements
         val nameEditText = view.findViewById<EditText>(R.id.nameEditText)
         val emailEditText = view.findViewById<EditText>(R.id.emailEditText)
         val passwordEditText = view.findViewById<EditText>(R.id.passwordEditText)
@@ -27,7 +48,15 @@ class SignupFragment : Fragment() {
         val registerButton = view.findViewById<Button>(R.id.registerButton)
         val signInText = view.findViewById<TextView>(R.id.signInText)
 
-        // Register button click listener
+        profileImageView = view.findViewById(R.id.profileImageView)
+        chooseImageButton = view.findViewById(R.id.chooseImageButton)
+
+        chooseImageButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            imagePickerLauncher.launch(intent)
+        }
+
         registerButton.setOnClickListener {
             val name = nameEditText.text.toString().trim()
             val email = emailEditText.text.toString().trim()
@@ -41,11 +70,10 @@ class SignupFragment : Fragment() {
             } else if (password.length < 6) {
                 Toast.makeText(requireContext(), "Password should be at least 6 characters", Toast.LENGTH_SHORT).show()
             } else {
-                registerNewUser(email, password)
+                registerNewUser(name, email, password)
             }
         }
 
-        // Sign In text click listener (to navigate to SignInFragment)
         signInText.setOnClickListener {
             openLoginPage()
         }
@@ -53,16 +81,13 @@ class SignupFragment : Fragment() {
         return view
     }
 
-    private fun registerNewUser(email: String, password: String) {
-        val name = view?.findViewById<EditText>(R.id.nameEditText)?.text.toString()
-
+    private fun registerNewUser(name: String, email: String, password: String) {
         AuthManager.signUpUser(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = AuthManager.getCurrentUser()
                     val uid = user?.uid
 
-                    // ✅ Update Firebase Auth profile with display name
                     val profileUpdates = UserProfileChangeRequest.Builder()
                         .setDisplayName(name)
                         .build()
@@ -70,14 +95,14 @@ class SignupFragment : Fragment() {
                     user?.updateProfile(profileUpdates)
                         ?.addOnCompleteListener { updateTask ->
                             if (updateTask.isSuccessful && uid != null) {
-                                // Save to Firestore (already works great!)
                                 val userData = hashMapOf(
                                     "email" to email,
                                     "name" to name,
-                                    "isAdmin" to false
+                                    "isAdmin" to false,
+                                    "profileImage" to (encodedImage ?: "")
                                 )
 
-                                val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                                val db = FirebaseFirestore.getInstance()
                                 db.collection("users").document(uid)
                                     .set(userData)
                                     .addOnSuccessListener {
@@ -97,6 +122,13 @@ class SignupFragment : Fragment() {
             }
     }
 
+    private fun saveImageToBase64() {
+        val bitmap = (profileImageView.drawable as? BitmapDrawable)?.bitmap ?: return
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val imageBytes = baos.toByteArray()
+        encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT)
+    }
 
     private fun openLoginPage() {
         parentFragmentManager.popBackStack()

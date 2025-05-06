@@ -5,5 +5,6 @@ import java.util.Date
 data class Messages(
     val date: Date = Date(),
     val text: String = "",
-    val userEmail: String = ""
+    val userEmail: String = "",
+    val imageBase64: String? = null
 )

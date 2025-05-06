@@ -11,7 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.synagoguemanagement.synagoguemanagement.R
 import com.synagoguemanagement.synagoguemanagement.ui.messages.MessageAdapter
-
 import java.util.Calendar
 
 class AdminMessagesFragment : Fragment() {
@@ -48,7 +47,6 @@ class AdminMessagesFragment : Fragment() {
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
 
-        // Get the start of today as a Date object
         val startOfDay = calendar.time
 
         // Set the time to the end of the day (23:59:59)
@@ -57,30 +55,23 @@ class AdminMessagesFragment : Fragment() {
         calendar.set(Calendar.SECOND, 59)
         calendar.set(Calendar.MILLISECOND, 999)
 
-        // Get the end of today as a Date object
         val endOfDay = calendar.time
 
-        // Query Firestore for messages from today
         db.collection("messages")
             .whereGreaterThanOrEqualTo("date", startOfDay)
             .whereLessThanOrEqualTo("date", endOfDay)
             .orderBy("date", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, exception ->
-                if (exception != null) {
-                    // Handle error
-                    return@addSnapshotListener
-                }
+                if (exception != null) return@addSnapshotListener
 
                 if (snapshot != null && !snapshot.isEmpty) {
-                    messages.clear()  // Clear the previous messages
+                    messages.clear()
                     for (document in snapshot.documents) {
                         val message = document.toObject(Messages::class.java)
-                        message?.let { messages.add(it) }  // Add message to list
+                        message?.let { messages.add(it) }
                     }
-                    adapter.notifyDataSetChanged()  // Update the RecyclerView
+                    adapter.notifyDataSetChanged()
                 }
             }
     }
 }
-
-

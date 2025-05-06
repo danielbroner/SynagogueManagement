@@ -33,15 +33,31 @@
         android:layout_marginBottom="30dp"
         android:padding="12dp"/>
 
+    <ImageView
+        android:id="@+id/imagePreview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/selectImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="Choose Image" />
+
     <!-- Send button -->
     <Button
         android:id="@+id/sendButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="50dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp" />
+
+
 
 
 </LinearLayout>
