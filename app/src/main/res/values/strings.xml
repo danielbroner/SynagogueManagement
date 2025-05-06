@@ -22,4 +22,6 @@
     <string name="available">Available</string>
     <string name="selected">Selected</string>
     <string name="sign_out">Sign Out</string>
+    <string name="message_image">Message image</string>
+
 </resources>

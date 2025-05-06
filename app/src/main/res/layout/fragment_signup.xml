@@ -24,6 +24,22 @@
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginBottom="16dp" />
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_profile"
+        android:background="@drawable/image_circle_background"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/chooseImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Profile Image"
+        android:layout_gravity="center"/>
 
     <!-- Name EditText -->
     <EditText
